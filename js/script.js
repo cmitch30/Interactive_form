@@ -51,4 +51,38 @@ field.addEventListener('change', (e) => {
     const dataCost = +(e.target.getAttribute("data-cost"));
     console.log(dataCost)
     console.log(typeof dataCost)
+    if (e.target.checked === true) {
+        totalCost += dataCost
+    } else if(e.target.checked === false) {
+        totalCost -= dataCost
+    }
+    total.innerHTML = `Total:$${totalCost}`
+})
+
+const paymentBox = document.querySelector("#payment");
+const credit = document.querySelector('#credit-card')
+const paypal = document.querySelector('#paypal')
+const bitcoin = document.querySelector('#bitcoin')
+console.log(paymentBox)
+console.log(credit);
+console.log(paypal);
+console.log(bitcoin);
+paypal.style.display = 'none'
+bitcoin.style.display = "none";
+paymentBox.children[1].setAttribute('selected', '')
+
+paymentBox.addEventListener('change', (e) => {
+    if (e.target.value === 'paypal') {
+        paypal.style.display = 'block'
+        bitcoin.style.display = "none";
+        credit.style.display = "none";
+    } else if(e.target.value === 'bitcoin') {
+            paypal.style.display = "none";
+            bitcoin.style.display = "block";
+            credit.style.display = "none";
+    } else {
+            paypal.style.display = "none";
+            bitcoin.style.display = "none";
+            credit.style.display = "block";
+    }
 })
