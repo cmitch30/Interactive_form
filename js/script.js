@@ -109,7 +109,7 @@ form.addEventListener("submit", (e) => {
   if (result === false) {
     e.preventDefault();
     e.target.parentElement.classList = "not-valid";
-    console.log(e.target.parentElement.lastElementChild)
+    e.target.parentElement.lastElementChild
     
   } else {
     e.target.parentElement.classList = "valid";
@@ -167,4 +167,4 @@ for (let i = 0; i < checkBox.length; i++) {
   });
 }
 
-function isValid(element) {}
+
