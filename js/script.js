@@ -108,40 +108,63 @@ form.addEventListener("submit", (e) => {
   console.log(result);
   if (result === false) {
     e.preventDefault();
-    nameSlot.style.borderColor = "red";
-    alert("Name field is required");
+    e.target.parentElement.classList = "not-valid";
+    console.log(e.target.parentElement.lastElementChild)
+    
   } else {
-    nameSlot.style.borderColor = "";
+    e.target.parentElement.classList = "valid";
   }
 
   if (emailRes === false) {
     e.preventDefault();
-    email.style.borderColor = "red";
-    alert("Email field is required");
+    e.target.parentElement.classList = "not-valid";
+    e.target.parentElement.lastElementChild
+   
   } else {
-    email.style.borderColor = "";
+    e.target.parentElement.classList = "valid";
   }
 
-  if (zipRes === false) {
+  if (paymentBox.value === "credit-card" && zipRes === false) {
     e.preventDefault();
-    zip.style.borderColor = "red";
-    alert("Invalid zip code");
+    e.target.parentElement.classList = "not-valid";
+    e.target.parentElement.lastElementChild
+   
   } else {
-    zip.style.borderColor = "";
+    e.target.parentElement.classList = "valid";
   }
 
-  if (cardVRes === false) {
+  if (paymentBox.value === "credit-card" && cardVRes === false) {
     e.preventDefault();
-    cv.style.borderColor = "red";
-  } else{
-    cardVRes.style.borderColor = "";
+    e.target.parentElement.classList = "not-valid";
+    e.target.parentElement.lastElementChild
+   
+  } else {
+    e.target.parentElement.classList = "valid";
   }
 
-  if (cardRes === false) {
+  if (paymentBox.value === "credit-card" && cardRes === false) {
     e.preventDefault();
-    cardNumber.style.borderColor = "red";
-    alert("Invalid payment information");
+    e.target.parentElement.classList = "not-valid";
+    e.target.parentElement.lastElementChild
+  
   } else {
-    cardNumber.style.borderColor = "";
+    e.target.parentElement.classList = "valid";
   }
 });
+
+const checkBox = document.querySelectorAll('input[type="checkbox"]');
+console.log(checkBox);
+
+for (let i = 0; i < checkBox.length; i++) {
+  const choice = checkBox[i];
+
+  choice.addEventListener("focus", (e) => {
+    e.target.parentElement.classList = "focus";
+  });
+
+  choice.addEventListener("blur", (e) => {
+    e.target.parentElement.classList = "";
+  });
+}
+
+function isValid(element) {}
