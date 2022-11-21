@@ -16,8 +16,7 @@ const cardNumber = document.getElementById("cc-num");
 const zip = document.getElementById("zip");
 const cv = document.getElementById("cvv");
 const form = document.querySelector("form");
-const checkBox = document.querySelectorAll('input[type="checkbox"]');;
-
+const checkBox = document.querySelectorAll('input[type="checkbox"]');
 
 //Highlight name field at page load
 username.focus();
@@ -36,14 +35,12 @@ jobMenu.addEventListener("change", (e) => {
 
 // console.log(color);
 
-
 //disable color choices until theme selected.
 color.disabled = true;
 
 design.addEventListener("change", (e) => {
   color.disabled = false;
   for (let i = 0; i < colors.length; i++) {
-    
     const value = e.target.value;
     const attr = colors[i].getAttribute("data-theme");
 
@@ -52,7 +49,7 @@ design.addEventListener("change", (e) => {
       colors[i].setAttribute("selected", true);
     } else {
       colors[i].hidden = true;
-     colors[i].setAttribute("selected", false);
+      colors[i].setAttribute("selected", false);
     }
   }
 });
@@ -83,7 +80,6 @@ paypal.style.display = "none";
 bitcoin.style.display = "none";
 paymentBox.children[1].setAttribute("selected", "");
 
-
 //change payment info based on method selection
 paymentBox.addEventListener("change", (e) => {
   if (e.target.value === "paypal") {
@@ -102,50 +98,58 @@ paymentBox.addEventListener("change", (e) => {
 });
 
 function validActivity() {
-  const selectedActs = totalCost > 0
-  return selectedActs
+  const selectedActs = totalCost > 0;
+  return selectedActs;
 }
 
 function validName() {
-  const name = username.value
+  const name = username.value;
   const nameTest = /^\D+ ?(\D+)? \D+$/.test(name);
 
   if (!nameTest) {
-    isNotValid(username)
+    isNotValid(username);
+    document.getElementById("name-hint").innerText =
+      "Name field must contain a first and last name";
   } else {
-    isValid(username)
+    isValid(username);
   }
-  return nameTest
+  return nameTest;
 }
 
 function validEmail() {
-  const emails = email.value
+  const emails = email.value;
   const emailTest = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emails);
 
   if (!emailTest) {
-    isNotValid(email)
+    if (emails === "") {
+      isNotValid(email);
+      document.getElementById("email-hint").innerText =
+        "Email address cannot be blank";
+    } else {
+      isNotValid(email);
+    }
   } else {
-    isValid(email)
+    isValid(email);
   }
-  return emailTest
+  return emailTest;
 }
 
 function validCard() {
-  const cardNum = cardNumber.value
+  const cardNum = cardNumber.value;
   const cardTest = /^\d{13,16}$/.test(cardNum);
-  return cardTest
+  return cardTest;
 }
 
 function validZip() {
-  const zipCode = zip.value
+  const zipCode = zip.value;
   const zipTest = /^\d{5}$/.test(zipCode);
-  return zipTest
+  return zipTest;
 }
 
 function validCvv() {
-  const cardCv = cvv.value
+  const cardCv = cvv.value;
   const cvTest = /^\d{3}$/.test(cardCv);
-  return cvTest
+  return cvTest;
 }
 
 function isValid(element) {
@@ -160,44 +164,43 @@ function isNotValid(element) {
   element.parentElement.lastElementChild.style.display = "block";
 }
 
-form.addEventListener('submit', (e) =>{
-if (!validName()) {
-  e.preventDefault()
-}
+form.addEventListener("submit", (e) => {
+  if (!validName()) {
+    e.preventDefault();
+  }
 
-if (!validEmail()) {
-  e.preventDefault()
-}
-if (!validActivity()){
-  e.preventDefault()
-  isNotValid(total)
-} else {
-  isValid(total)
-}
-
-if(paymentBox.value === 'credit-card') {
-  if(!validCard()) {
-    e.preventDefault()
-    isNotValid(cardNumber)
+  if (!validEmail()) {
+    e.preventDefault();
+  }
+  if (!validActivity()) {
+    e.preventDefault();
+    isNotValid(total);
   } else {
-    isValid(cardNumber)
-  }
-  if (!validZip()) {
-    e.preventDefault()
-    isNotValid(zip)
-  } else{
-    isValid(zip)
+    isValid(total);
   }
 
-  if(!validCvv()) {
-    e.preventDefault()
-    isNotValid(cv)
-  } else{
-    isValid(cv)
-  }
-}
-})
+  if (paymentBox.value === "credit-card") {
+    if (!validCard()) {
+      e.preventDefault();
+      isNotValid(cardNumber);
+    } else {
+      isValid(cardNumber);
+    }
+    if (!validZip()) {
+      e.preventDefault();
+      isNotValid(zip);
+    } else {
+      isValid(zip);
+    }
 
+    if (!validCvv()) {
+      e.preventDefault();
+      isNotValid(cv);
+    } else {
+      isValid(cv);
+    }
+  }
+});
 
 console.log(checkBox);
 
@@ -213,24 +216,23 @@ for (let i = 0; i < checkBox.length; i++) {
   });
 }
 
-
-field.addEventListener('change', (e) => {
-  const clicked = e.target
-  const dates = clicked.getAttribute('data-day-and-time')
+field.addEventListener("change", (e) => {
+  const clicked = e.target;
+  const dates = clicked.getAttribute("data-day-and-time");
 
   for (let i = 0; i < checkBox.length; i++) {
     const checkBoxDate = checkBox[i].getAttribute("data-day-and-time");
     if (dates === checkBoxDate && clicked !== checkBox[i]) {
       if (clicked.checked) {
-        checkBox[i].disabled = true
-        checkBox[i].parentElement.classList.add('disabled')
+        checkBox[i].disabled = true;
+        checkBox[i].parentElement.classList.add("disabled");
       } else {
-        checkBox[i].disabled = false
-        checkBox[i].parentElement.classList.remove('disabled')
+        checkBox[i].disabled = false;
+        checkBox[i].parentElement.classList.remove("disabled");
       }
     }
   }
-})
+});
 
-username.addEventListener('keyup', validName)
-email.addEventListener('keyup', validEmail)
+username.addEventListener("keyup", validName);
+email.addEventListener("keyup", validEmail);
