@@ -49,7 +49,7 @@ design.addEventListener("change", (e) => {
       colors[i].setAttribute("selected", true);
     } else {
       colors[i].hidden = true;
-      colors[i].setAttribute("selected", false);
+      colors[i].removeAttribute('selected')
     }
   }
 });
@@ -127,6 +127,8 @@ function validEmail() {
         "Email address cannot be blank";
     } else {
       isNotValid(email);
+       document.getElementById("email-hint").innerText =
+         "Email address must be formatted correctly";
     }
   } else {
     isValid(email);
@@ -202,7 +204,7 @@ form.addEventListener("submit", (e) => {
   }
 });
 
-console.log(checkBox);
+// console.log(checkBox);
 
 for (let i = 0; i < checkBox.length; i++) {
   const choice = checkBox[i];
