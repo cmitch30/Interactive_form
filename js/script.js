@@ -236,5 +236,7 @@ field.addEventListener("change", (e) => {
   }
 });
 
+// Provides real-time validation for the user on the Name and Email inputs
+
 username.addEventListener("keyup", validName);
 email.addEventListener("keyup", validEmail);
