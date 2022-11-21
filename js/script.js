@@ -1,56 +1,70 @@
-const nameSlot = document.getElementById("name");
-nameSlot.focus();
-
-const jobMenu = document.querySelector("select");
-// console.log(jobMenu)
+const username = document.getElementById("name");
+const jobMenu = document.getElementById("title");
 const jobRole = document.getElementById("other-job-role");
+const design = document.getElementById("design");
+const color = document.getElementById("color");
+const colors = color.children;
+const field = document.getElementById("activities");
+const total = document.getElementById("activities-cost");
+let totalCost = 0;
+const paymentBox = document.getElementById("payment");
+const credit = document.getElementById("credit-card");
+const paypal = document.getElementById("paypal");
+const bitcoin = document.getElementById("bitcoin");
+const email = document.getElementById("email");
+const cardNumber = document.getElementById("cc-num");
+const zip = document.getElementById("zip");
+const cv = document.getElementById("cvv");
+const form = document.querySelector("form");
+const checkBox = document.querySelectorAll('input[type="checkbox"]');;
+
+
+//Highlight name field at page load
+username.focus();
+
+// console.log(jobMenu)
+//hide text area for job role
 jobRole.style.display = "none";
 
 jobMenu.addEventListener("change", (e) => {
   if (e.target.value === "other") {
-    jobRole.style.display = "block";
-    jobRole.value = "";
+    jobRole.style.display = "";
   } else {
     jobRole.style.display = "none";
   }
 });
 
-const design = document.querySelector("#design");
-const color = document.querySelector("#color");
-console.log(color);
+// console.log(color);
+
+
+//disable color choices until theme selected.
 color.disabled = true;
 
 design.addEventListener("change", (e) => {
   color.disabled = false;
-  const colors = color.children;
-
   for (let i = 0; i < colors.length; i++) {
-    let element = colors[i];
-    console.log(element);
+    
     const value = e.target.value;
-    const attr = element.getAttribute("data-theme");
+    const attr = colors[i].getAttribute("data-theme");
 
     if (value === attr) {
-      element.hidden = false;
-      element.setAttribute("selected", true);
+      colors[i].hidden = false;
+      colors[i].setAttribute("selected", true);
     } else {
-      element.hidden = true;
-      element.setAttribute("selected", false);
+      colors[i].hidden = true;
+     colors[i].setAttribute("selected", false);
     }
   }
 });
 
-const field = document.querySelector(".activities");
-const total = document.querySelector("fieldset > p");
-console.log(field);
-console.log(total);
+// console.log(field);
+// console.log(total);
 
-let totalCost = 0;
-
+//user can select activites and total is updated
 field.addEventListener("change", (e) => {
   const dataCost = +e.target.getAttribute("data-cost");
-  console.log(dataCost);
-  console.log(typeof dataCost);
+  // console.log(dataCost);
+  // console.log(typeof dataCost);
   if (e.target.checked === true) {
     totalCost += dataCost;
   } else if (e.target.checked === false) {
@@ -59,112 +73,164 @@ field.addEventListener("change", (e) => {
   total.innerHTML = `Total:$${totalCost}`;
 });
 
-const paymentBox = document.querySelector("#payment");
-const credit = document.querySelector("#credit-card");
-const paypal = document.querySelector("#paypal");
-const bitcoin = document.querySelector("#bitcoin");
-console.log(paymentBox);
-console.log(credit);
-console.log(paypal);
-console.log(bitcoin);
+// console.log(paymentBox);
+// console.log(credit);
+// console.log(paypal);
+// console.log(bitcoin);
+
+//set credit card as default
 paypal.style.display = "none";
 bitcoin.style.display = "none";
 paymentBox.children[1].setAttribute("selected", "");
 
+
+//change payment info based on method selection
 paymentBox.addEventListener("change", (e) => {
   if (e.target.value === "paypal") {
-    paypal.style.display = "block";
+    paypal.style.display = "";
     bitcoin.style.display = "none";
     credit.style.display = "none";
   } else if (e.target.value === "bitcoin") {
     paypal.style.display = "none";
-    bitcoin.style.display = "block";
+    bitcoin.style.display = "";
     credit.style.display = "none";
   } else {
     paypal.style.display = "none";
     bitcoin.style.display = "none";
-    credit.style.display = "block";
+    credit.style.display = "";
   }
 });
 
-const email = document.querySelector("#email");
-const cardNumber = document.querySelector("#cc-num");
-const zip = document.querySelector("#zip");
-const cv = document.querySelector("#cvv");
-const form = document.querySelector("form");
+function validActivity() {
+  const selectedActs = totalCost > 0
+  return selectedActs
+}
 
-form.addEventListener("submit", (e) => {
-  const name = nameSlot.value;
-  const mail = email.value;
-  const zipCode = zip.value;
-  const cardNum = cardNumber.value;
-  const cardV = cv.value;
+function validName() {
+  const name = username.value
+  const nameTest = /^\D+ ?(\D+)? \D+$/.test(name);
 
-  let cardRes = /^4[0-9]{12}(?:[0-9]{3})?$/.test(cardNum);
-  let zipRes = /^[0-9]{5}(-[0-9]{4})?$/.test(zipCode);
-  let cardVRes = /^[0-9]{3, 4}$/.test(cardV);
-  let emailRes = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(mail);
-  let result = /^[a-zA-Z ]+$/.test(name);
-  console.log(result);
-  if (result === false) {
-    e.preventDefault();
-    e.target.parentElement.classList = "not-valid";
-    e.target.parentElement.lastElementChild
-    
+  if (!nameTest) {
+    isNotValid(username)
   } else {
-    e.target.parentElement.classList = "valid";
+    isValid(username)
+  }
+  return nameTest
+}
+
+function validEmail() {
+  const emails = email.value
+  const emailTest = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emails);
+
+  if (!emailTest) {
+    isNotValid(email)
+  } else {
+    isValid(email)
+  }
+  return emailTest
+}
+
+function validCard() {
+  const cardNum = cardNumber.value
+  const cardTest = /^\d{13,16}$/.test(cardNum);
+  return cardTest
+}
+
+function validZip() {
+  const zipCode = zip.value
+  const zipTest = /^\d{5}$/.test(zipCode);
+  return zipTest
+}
+
+function validCvv() {
+  const cardCv = cvv.value
+  const cvTest = /^\d{3}$/.test(cardCv);
+  return cvTest
+}
+
+function isValid(element) {
+  element.parentElement.classList.add("valid");
+  element.parentElement.classList.remove("not-valid");
+  element.parentElement.lastElementChild.style.display = "";
+}
+
+function isNotValid(element) {
+  element.parentElement.classList.add("not-valid");
+  element.parentElement.classList.remove("valid");
+  element.parentElement.lastElementChild.style.display = "block";
+}
+
+form.addEventListener('submit', (e) =>{
+if (!validName()) {
+  e.preventDefault()
+}
+
+if (!validEmail()) {
+  e.preventDefault()
+}
+if (!validActivity()){
+  e.preventDefault()
+  isNotValid(total)
+} else {
+  isValid(total)
+}
+
+if(paymentBox.value === 'credit-card') {
+  if(!validCard()) {
+    e.preventDefault()
+    isNotValid(cardNumber)
+  } else {
+    isValid(cardNumber)
+  }
+  if (!validZip()) {
+    e.preventDefault()
+    isNotValid(zip)
+  } else{
+    isValid(zip)
   }
 
-  if (emailRes === false) {
-    e.preventDefault();
-    e.target.parentElement.classList = "not-valid";
-    e.target.parentElement.lastElementChild
-   
-  } else {
-    e.target.parentElement.classList = "valid";
+  if(!validCvv()) {
+    e.preventDefault()
+    isNotValid(cv)
+  } else{
+    isValid(cv)
   }
+}
+})
 
-  if (paymentBox.value === "credit-card" && zipRes === false) {
-    e.preventDefault();
-    e.target.parentElement.classList = "not-valid";
-    e.target.parentElement.lastElementChild
-   
-  } else {
-    e.target.parentElement.classList = "valid";
-  }
 
-  if (paymentBox.value === "credit-card" && cardVRes === false) {
-    e.preventDefault();
-    e.target.parentElement.classList = "not-valid";
-    e.target.parentElement.lastElementChild
-   
-  } else {
-    e.target.parentElement.classList = "valid";
-  }
-
-  if (paymentBox.value === "credit-card" && cardRes === false) {
-    e.preventDefault();
-    e.target.parentElement.classList = "not-valid";
-    e.target.parentElement.lastElementChild
-  
-  } else {
-    e.target.parentElement.classList = "valid";
-  }
-});
-
-const checkBox = document.querySelectorAll('input[type="checkbox"]');
 console.log(checkBox);
 
 for (let i = 0; i < checkBox.length; i++) {
   const choice = checkBox[i];
 
   choice.addEventListener("focus", (e) => {
-    e.target.parentElement.classList = "focus";
+    e.target.parentElement.classList.add("focus");
   });
 
   choice.addEventListener("blur", (e) => {
-    e.target.parentElement.classList = "";
+    e.target.parentElement.classList.remove("focus");
   });
 }
 
 
+field.addEventListener('change', (e) => {
+  const clicked = e.target
+  const dates = clicked.getAttribute('data-day-and-time')
+
+  for (let i = 0; i < checkBox.length; i++) {
+    const checkBoxDate = checkBox[i].getAttribute("data-day-and-time");
+    if (dates === checkBoxDate && clicked !== checkBox[i]) {
+      if (clicked.checked) {
+        checkBox[i].disabled = true
+        checkBox[i].parentElement.classList.add('disabled')
+      } else {
+        checkBox[i].disabled = false
+        checkBox[i].parentElement.classList.remove('disabled')
+      }
+    }
+  }
+})
+
+username.addEventListener('keyup', validName)
+email.addEventListener('keyup', validEmail)
